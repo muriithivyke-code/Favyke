@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Favyke ❤️</title>
+<style>
+body.locked { overflow: hidden; height: 100vh; margin:0; font-family: 'Georgia', serif; background: radial-gradient(circle at top, #1b1b3a, #000); color:#fff; text-align:center; }
+body { overflow-x:hidden; text-align:center; background: radial-gradient(circle at top, #1b1b3a, #000); color:#fff; transition: all 0.8s ease; }
+
+.center { min-height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; }
+
+input, button { padding:12px; border-radius:20px; border:none; font-size:16px; margin-top:10px; outline:none; }
+input { width:220px; text-align:center; }
+button { background:#ff4d6d; color:white; cursor:pointer; transition:all 0.3s ease; }
+button:hover { box-shadow:0 0 18px rgba(255,77,109,0.6); transform:scale(1.05); }
+.soft-btn { background:transparent; border:1px solid #ff6b81; margin-top:10px; font-style:italic; }
+
+/* CARD */
+.card { max-width:420px; background: rgba(255,255,255,0.08); padding:25px; border-radius:25px; box-shadow:0 0 40px rgba(255,77,109,0.35); animation:fadeIn 2s ease, breathe 6s ease-in-out infinite; z-index:1; }
+.poem { font-style:italic; line-height:1.7; margin-top:15px; opacity:0.95; cursor:pointer; transition:opacity 0.4s ease, transform 0.4s ease; }
+.hint { font-size:12px; opacity:0.6; margin-top:5px; }
+#comfort { margin-top:15px; font-style:italic; opacity:0.9; transition: opacity 0.4s ease, transform 0.4s ease; }
+.days { margin-top:15px; font-size:16px; color:#ffd6e0; }
+
+/* SLIDESHOW */
+.slide { width:100%; display:none; border-radius:20px; opacity:0; transition: opacity 3s ease-in-out; position:absolute; top:0; left:0; }
+#slideshow { margin-bottom:15px; border-radius:20px; overflow:hidden; position:relative; height:220px; }
+
+/* LOCK SHAKE */
+.shake { animation: shake 0.4s; }
+@keyframes shake {0%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}100%{transform:translateX(0);}}
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0); } }
+@keyframes breathe { 0%,100%{transform:scale(1);} 50%{transform:scale(1.015);} }
+
+/* FLOATING SHAPES */
+.shape { position:fixed; bottom:-20px; width:12px; height:12px; border-radius:50%; background:rgba(255,107,129,0.35); animation:floatUp 12s linear infinite; pointer-events:none; z-index:0; }
+.shape.heart { width:14px; height:14px; background:#ff6b81; transform:rotate(45deg);}
+.shape.heart::before,.shape.heart::after{ content:''; position:absolute; width:14px; height:14px; background:#ff6b81; border-radius:50%;}
+l
+.shape.heart::before{ top:-7px; left:0;}
+.shape.heart::after{ left:-7px; top:0;}
+@keyframes floatUp{ from{transform:translateY(0px) scale(0.6); opacity:0;} 20%{opacity:0.8;} to{transform:translateY(-110vh) scale(1.2); opacity:0;}}
+
+canvas { position:fixed; top:0; left:0; pointer-events:none; z-index:0; }
+</style>
+</head>
+
+<body class="locked">
+
+<!-- LOCK -->
+<div class="center" id="lock">
+  <h2>🔐 To continue</h2>
+  <p>Enter the name of the soul that owns my heart</p>
+  <input type="text" id="password" placeholder="Her name…">
+  <p>Enter our secret PIN</p>
+  <input type="password" id="pin" placeholder="••••">
+  <br>
+  <button onclick="unlock()">Open ❤️</button>
+  <p id="error" style="color:#ff6b81;"></p>
+</div>
+
+<!-- CONTENT -->
+<div class="center hidden" id="content">
+  <audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c8c5b9b1d.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="card" id="loveCard">
+
+    <!-- IMAGE SLIDESHOW -->
+    <div id="slideshow">
+      <img src="IMG_20260104_002930_964.jpg" class="slide" style="display:block; opacity:1;">
+      <img src="IMG_20260101_040122_215.webp" class="slide"style="display:block; opacity:1;">
+      <img src="IMG_20260104_002926_865.jpg" class="slide" style="display:block; opacity:1;">
+      <img src="IMG_20251213_192101_178.jpg" class="slide" style="display:block; opacity:1;">
+      <img src="IMG_20260104_002930_962.jpg" class="slide" style="display:block; opacity:1;">
+      <img src="IMG_20251213_192120_124.jpg" class="slide" style="display:block; opacity:1;">
+    </div>
+
+    <h1>Favyke ❤️</h1>
+    <div class="poem" id="poem" onclick="changePoem()"></div>
+    <div class="hint">Tap the words when your heart feels heavy</div>
+
+    <button class="soft-btn" onclick="missMe()">Tap when you miss me</button>
+    <div id="comfort"></div>
+
+    <div class="days" id="daysCounter"></div>
+
+    <!-- Birthday countdowns -->
+    <div class="days" id="birthdayFavyke"></div>
+    <div class="days" id="birthdayYou"></div>
+
+    <p style="margin-top:15px;opacity:0.7;">— Yours, endlessly Vyke</p>
+
+  </div>
+</div>
+
+<!-- MESSAGE PANEL (HIDDEN) -->
+<div id="messagePanel" style="display:none; position:fixed; bottom:20px; right:20px; width:250px; max-height:300px; overflow-y:auto; background: rgba(255,255,255,0.05); border-radius:15px; box-shadow:0 0 15px rgba(255,77,109,0.4); padding:10px; z-index:10;">
+  <input type="text" id="messageInput" placeholder="Type a message..." style="width:100%; border-radius:20px; padding:6px; box-shadow:0 0 12px rgba(255,77,109,0.4);">
+  <button class="soft-btn" onclick="sendMessage()">Send 💌</button>
+</div>
+
+<!-- EMOJI TO TOGGLE MESSAGE PANEL -->
+<button id="toggleMessage" class="soft-btn" style="position:fixed; bottom:20px; left:20px;">💌</button>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+const correctPassword = "Favyke";
+const correctPin = "1107";
+const startDate = new Date("2024-12-28");
+
+const poems = [
+  "I just want you to know I think about you a lot.",
+  "No matter how the day goes, you’re always on my mind.",
+  "I don’t have perfect words, but my feelings for you are real.",
+  "Even when I’m quiet, I care about you deeply.",
+  "You matter to me. More than you know.",
+  "I’m choosing you today, and I’ll choose you again tomorrow."
+];
+
+const comforts = [
+  "I’m here. You’re not alone 🤍",
+  "It’s okay to miss me. I miss you too.",
+  "Take a breath… everything will be okay.",
+  "Even now, I care about you deeply.",
+  "You mean a lot to me. Always."
+];
+
+let poemIndex=0;
+
+// UNLOCK WITH BIRTHDAY FIREWORKS
+function unlock() {
+  const nameInput = document.getElementById("password").value.trim().toLowerCase();
+  const pinInput = document.getElementById("pin").value.trim();
+  if(nameInput === correctPassword.toLowerCase() && pinInput === correctPin){
+    document.body.classList.remove("locked");
+    document.getElementById("lock").classList.add("hidden");
+    document.getElementById("content").classList.remove("hidden");
+    document.getElementById("music").play();
+    document.getElementById("poem").innerHTML = poems[0];
+    updateDays();
+    slowScrollToBottom(4000);
+
+    // Regular fireworks
+    for(let i=0;i<5;i++) setTimeout(firework,i*400);
+    animate();
+
+    // Birthday fireworks trigger
+    const today = new Date();
+    const month = today.getMonth();
+    const day = today.getDate();
+    if((month===6 && day===7) || (month===10 && day===11)){
+      for(let i=0;i<20;i++) setTimeout(firework,i*300); // extra bursts
+      setInterval(createShape,400); // more floating hearts
+    }
+
+  } else {
+    const lockBox = document.getElementById("lock");
+    lockBox.classList.add("shake");
+    document.getElementById("error").innerText = "Only the heart that knows the name and PIN can enter 💔";
+    setTimeout(()=>lockBox.classList.remove("shake"),400);
+  }
+}
+
+// POEMS
+function changePoem() { poemIndex=(poemIndex+1)%poems.length; smoothChange(document.getElementById("poem"),poems[poemIndex]); }
+function missMe() { const msg=comforts[Math.floor(Math.random()*comforts.length)]; smoothChange(document.getElementById("comfort"),msg); }
+
+// DAYS
+function updateDays() {
+  const now = new Date();
+  const diff = now - startDate; // in milliseconds
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  document.getElementById("daysCounter").innerText =
+    `We have loved for ${days}d ${hours}h ${minutes}m ${seconds}s 🌙`;
+}
+
+// Update every second
+setInterval(updateDays, 1000);
+updateDays();
+
+// BIRTHDAY COUNTDOWNS
+function updateBirthdayCountdowns() {
+  const now = new Date();
+
+  let favykeBD = new Date(now.getFullYear(),6,7);
+  if(favykeBD < now) favykeBD.setFullYear(favykeBD.getFullYear()+1);
+  const diffF = favykeBD-now;
+  const daysF = Math.floor(diffF/(1000*60*60*24));
+  const hoursF = Math.floor((diffF%(1000*60*60*24))/(1000*60*60));
+  const minsF = Math.floor((diffF%(1000*60*60))/(1000*60));
+  const secsF = Math.floor((diffF%(1000*60))/1000);
+  document.getElementById("birthdayFavyke").innerText=
+    `Favyke's birthday in ${daysF}d ${hoursF}h ${minsF}m ${secsF}s 🎉`;
+
+  let yourBD = new Date(now.getFullYear(),10,11);
+  if(yourBD < now) yourBD.setFullYear(yourBD.getFullYear()+1);
+  const diffY = yourBD - now;
+  const daysY = Math.floor(diffY/(1000*60*60*24));
+  const hoursY = Math.floor((diffY%(1000*60*60*24))/(1000*60*60));
+  const minsY = Math.floor((diffY%(1000*60*60))/(1000*60));
+  const secsY = Math.floor((diffY%(1000*60))/1000);
+  document.getElementById("birthdayYou").innerText=
+    `My birthday in ${daysY}d ${hoursY}h ${minsY}m ${secsY}s 🎉`;
+}
+setInterval(updateBirthdayCountdowns,1000);
+updateBirthdayCountdowns();
+
+// MESSAGE PANEL TOGGLE
+document.getElementById("toggleMessage").addEventListener("click", ()=>{
+  const panel=document.getElementById("messagePanel");
+  panel.style.display=panel.style.display==="none"?"block":"none";
+});
+
+// FLOATING CHAT
+function sendMessage(){
+  const input=document.getElementById("messageInput");
+  const text=input.value.trim(); if(text==="") return;
+  const bubble=document.createElement("div");
+  bubble.innerText=text;
+  bubble.style.position="fixed";
+  bubble.style.bottom="60px";
+  bubble.style.left=Math.random()*80+"vw";
+  bubble.style.background="rgba(255,105,180,0.6)";
+  bubble.style.padding="8px 12px";
+  bubble.style.borderRadius="20px";
+  bubble.style.color="#fff";
+  bubble.style.fontSize="14px";
+  bubble.style.opacity=0;
+  bubble.style.zIndex=20;
+  bubble.style.pointerEvents="none";
+  document.body.appendChild(bubble);
+  let pos=60, opacity=0;
+  let id=setInterval(()=>{
+    pos+=1; opacity+=0.02;
+    bubble.style.bottom=pos+"px";
+    bubble.style.opacity=Math.min(opacity,1);
+    if(pos>window.innerHeight){ clearInterval(id); bubble.remove(); }
+  },20);
+  input.value="";
+}
+
+// SMOOTH TEXT CHANGE
+function smoothChange(el,newHTML){ el.classList.add("fade"); setTimeout(()=>{ el.innerHTML=newHTML; el.classList.remove("fade"); },400); }
+
+// SLOW SCROLL TO BOTTOM
+function slowScrollToBottom(duration=4000){
+  const startPosition=window.scrollY;
+  const targetPosition=document.body.scrollHeight-window.innerHeight;
+  const distance=targetPosition-startPosition;
+  let startTime=null;
+  function animation(currentTime){
+    if(startTime===null) startTime=currentTime;
+    const timeElapsed=currentTime-startTime;
+    const run=easeInOutQuad(timeElapsed,startPosition,distance,duration);
+    window.scrollTo(0,run);
+    if(timeElapsed<duration) requestAnimationFrame(animation);
+  }
+  function easeInOutQuad(t,b,c,d){ t/=d/2; if(t<1) return c/2*t*t+b; t--; return -c/2*(t*(t-2)-1)+b; }
+  requestAnimationFrame(animation);
+}
+
+// SLIDESHOW
+let slideIndex=0;
+const slides=document.querySelectorAll(".slide");
+function showSlides(){ slides.forEach((s,i)=>{s.style.opacity=0;s.style.display="block";}); slides[slideIndex].style.opacity=1; let nextIndex=(slideIndex+1)%slides.length; setTimeout(()=>{ slides[slideIndex].style.opacity=0; slides[nextIndex].style.opacity=1; slideIndex=nextIndex; showSlides(); },6000);}
+document.getElementById("music").addEventListener("play",showSlides);
+
+// FIREWORKS
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth; canvas.height=window.innerHeight; let particles=[];
+function firework(){ for(let i=0;i<80;i++){ particles.push({x:canvas.width/2,y:canvas.height/2,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:100}); } }
+function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach((p,i)=>{ p.x+=p.dx; p.y+=p.dy; p.life--; ctx.fillStyle="rgba(255,105,180,0.8)"; ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill(); if(p.life<=0) particles.splice(i,1); }); requestAnimationFrame(animate); }
+
+// FLOATING SHAPES
+function createShape(){ const shape=document.createElement("div"); const isHeart=Math.random()>0.6; shape.className="shape"+(isHeart?" heart":""); shape.style.left=Math.random()*100+"vw"; shape.style.animationDuration=(8+Math.random()*8)+"s"; document.body.appendChild(shape); setTimeout(()=>shape.remove(),15000);}
+setInterval(createShape,900);
+
+// ENTER TO UNLOCK
+document.getElementById("password").addEventListener("keypress",function(e){ if(e.key==="Enter") unlock(); });
+document.getElementById("pin").addEventListener("keypress",function(e){ if(e.key==="Enter") unlock(); });
+</script>
+</body>
+</html>

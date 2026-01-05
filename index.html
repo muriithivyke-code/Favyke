@@ -9,12 +9,26 @@ body.locked { overflow: hidden; height: 100vh; margin:0; font-family: 'Georgia',
 body { overflow-x:hidden; text-align:center; background: radial-gradient(circle at top, #1b1b3a, #000); color:#fff; transition: all 0.8s ease; }
 
 .center { min-height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; }
-
-input, button { padding:12px; border-radius:20px; border:none; font-size:16px; margin-top:10px; outline:none; }
-input { width:220px; text-align:center; }
-button { background:#ff4d6d; color:white; cursor:pointer; transition:all 0.3s ease; }
-button:hover { box-shadow:0 0 18px rgba(255,77,109,0.6); transform:scale(1.05); }
-.soft-btn { background:transparent; border:1px solid #ff6b81; margin-top:10px; font-style:italic; }
+  /* Love days counter (big) */
+  #daysCounter {
+    margin-top: 20px;
+    font-size: 28px;
+    color: #ffd6e0;
+    font-weight: bold;
+  }
+  
+  /* Birthday countdowns (smaller) */
+  #birthdayFavyke, #birthdayYou {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ff9fb1;
+    opacity: 0.8;
+  }
+  input, button { padding:12px; border-radius:20px; border:none; font-size:16px; margin-top:10px; outline:none; }
+  input { width:220px; text-align:center; }
+  button { background:#ff4d6d; color:white; cursor:pointer; transition:all 0.3s ease; }
+  button:hover { box-shadow:0 0 18px rgba(255,77,109,0.6); transform:scale(1.05); }
+  .soft-btn { background:transparent; border:1px solid #ff6b81; margin-top:10px; font-style:italic; }
 
 /* CARD */
 .card { max-width:420px; background: rgba(255,255,255,0.08); padding:25px; border-radius:25px; box-shadow:0 0 40px rgba(255,77,109,0.35); animation:fadeIn 2s ease, breathe 6s ease-in-out infinite; z-index:1; }

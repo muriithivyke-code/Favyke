@@ -7,6 +7,30 @@
 <style>
 body.locked { overflow: hidden; height: 100vh; margin:0; font-family: 'Georgia', serif; background: radial-gradient(circle at top, #1b1b3a, #000); color:#fff; text-align:center; }
 body { overflow-x:hidden; text-align:center; background: radial-gradient(circle at top, #1b1b3a, #000); color:#fff; transition: all 0.8s ease; }
+  .message {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 77, 109, 0.15);
+  padding: 10px 18px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(255,77,109,0.4);
+  pointer-events: none;
+  opacity: 0.9;
+  white-space: nowrap;
+  animation: floatUp 6s linear forwards;
+}
+
+/* Floating animation, but now it does NOT disappear */
+@keyframes floatUp {
+  0% { bottom: 20px; opacity: 0.9; transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+  100% { bottom: 300px; opacity: 0.9; transform: translateX(-50%) scale(1); }
+}
 
 .center { min-height:100vh; display:flex; justify-content:center; align-items:center; flex-direction:column; }
   /* Love days counter (big) */
@@ -124,7 +148,7 @@ canvas { position:fixed; top:0; left:0; pointer-events:none; z-index:0; }
 
 <script>
 const correctPassword = "Favyke";
-const correctPin = "1107";
+const correctPin = "0000";
 const startDate = new Date("2024-12-28");
 
 const poems = [
@@ -295,6 +319,7 @@ const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth; canvas.height=window.innerHeight; let particles=[];
 function firework(){ for(let i=0;i<80;i++){ particles.push({x:canvas.width/2,y:canvas.height/2,dx:(Math.random()-0.5)*6,dy:(Math.random()-0.5)*6,life:100}); } }
 function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach((p,i)=>{ p.x+=p.dx; p.y+=p.dy; p.life--; ctx.fillStyle="rgba(255,105,180,0.8)"; ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill(); if(p.life<=0) particles.splice(i,1); }); requestAnimationFrame(animate); }
+  
 
 // FLOATING SHAPES
 function createShape(){ const shape=document.createElement("div"); const isHeart=Math.random()>0.6; shape.className="shape"+(isHeart?" heart":""); shape.style.left=Math.random()*100+"vw"; shape.style.animationDuration=(8+Math.random()*8)+"s"; document.body.appendChild(shape); setTimeout(()=>shape.remove(),15000);}
@@ -303,6 +328,25 @@ setInterval(createShape,900);
 // ENTER TO UNLOCK
 document.getElementById("password").addEventListener("keypress",function(e){ if(e.key==="Enter") unlock(); });
 document.getElementById("pin").addEventListener("keypress",function(e){ if(e.key==="Enter") unlock(); });
+  function showFloatingMessage(text) {
+  const msg = document.createElement("div");
+  msg.classList.add("message");
+  msg.innerText = text;
+
+  document.body.appendChild(msg);
+
+  // Optional: remove old messages if you want a max of 20 messages
+  const messages = document.querySelectorAll(".message");
+  if (messages.length > 20) {
+    messages[0].remove();
+  }
+}
+
+// Example: when she taps the 💬 emoji
+document.getElementById("messageBtn").addEventListener("click", () => {
+  const text = prompt("Send your message ❤️");
+  if (text) showFloatingMessage(text);
+});
 </script>
 </body>
 </html>
